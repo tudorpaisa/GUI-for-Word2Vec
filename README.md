@@ -15,7 +15,7 @@ An additional step for this application to work properly is to create a model th
 2. Such a corpus typically has over 100 MB in size; this violates GitHub's file limit
 
 ## :exclamation: Prerequisites :exclamation:
-Besides dependencies, you need a model. If you don't have one yet, then [make one](https://rare-technologies.com/word2vec-tutorial/)
+Besides dependencies, you need a model. If you don't have one yet, then [make one](https://rare-technologies.com/word2vec-tutorial/). I also have a script [here](https://github.com/tudorpaisa/train-word2vec) to help you create your W2V model
 
 ## Dependencies
 ```
@@ -23,6 +23,7 @@ python3 gensim pandas scipy numpy pygobject3
 ```
 
 ## TODO
+* [ ] Add the entire palette of W2V querying options
 - [ ] Make the model loading process run on a separate thread
 - [ ] Consider a new naming scheme for the exports; _seconds might be a little bit overkill_
 
