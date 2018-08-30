@@ -2,14 +2,10 @@
 
 This project is a simple GTK3 graphical user interface (GUI) for [gensim's Word2Vec](https://radimrehurek.com/gensim/). It's purpose is to streamline (at least a bit) the process of querying a W2V model. Currently, it only outputs the cosine similarity between inputed terms.
 
-## Installation
-Besides having all the dependencies, you need a [KeyedVectors](https://radimrehurek.com/gensim/models/keyedvectors.html) W2V model. Name you model `w2v_model.wv` and replace the existing (dummy) file in the `src/` folder with your model.
-
 ## How it works
 It a __3__ step process:
 1. Enter the words you want to use in the input field, each on a new line
-2. Load the model (and wait a bit xD)
-3. Query
+2. Load the model, and wait a bit. The model must be a KeyedVectors Word2Vec `.wv` file 3. Query
 
 The results will be a CSV file in the `exports`. The filename of the export is of the following format: `<year><month><day>_<hour><minute><second> - W2V_Cosines.csv`
 
@@ -18,7 +14,7 @@ An additional step for this application to work properly is to create a model th
 2. Such a corpus typically has over 100 MB in size; this violates GitHub's file limit
 
 ## :exclamation: Prerequisites :exclamation:
-Besides dependencies, you need a model. If you don't have one yet, then [make one](https://rare-technologies.com/word2vec-tutorial/). I also have a script [here](https://github.com/tudorpaisa/train-word2vec) to help you create your W2V model
+Besides dependencies, you need a model. If you don't have one yet, then [make one](https://rare-technologies.com/word2vec-tutorial/) (make sure you save it as [KeyedVectors](https://radimrehurek.com/gensim/models/keyedvectors.html)). I also have a script [here](https://github.com/tudorpaisa/train-word2vec) to help you create your W2V model
 
 ## Dependencies
 ```
