@@ -13,7 +13,7 @@ class MainWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title='Simple Word2Vec')
         self.set_border_width(20)
-        self.set_size_request(1280, 720)
+        self.set_size_request(800, 600)
 
         headerbar = Gtk.HeaderBar()
         headerbar.set_show_close_button(True)
@@ -58,6 +58,7 @@ class MainWindow(Gtk.Window):
         ###---Input Box---###
         scrolledwindow = Gtk.ScrolledWindow()
         scrolledwindow.set_hexpand(True)
+        scrolledwindow.set_min_content_height(250)
         scrolledwindow.set_vexpand(True)
 
         vbox.pack_start(scrolledwindow, True, True, 0)
@@ -90,11 +91,23 @@ class MainWindow(Gtk.Window):
         query_submit = Gtk.Button(label='Submit')
         query_submit.connect("clicked", self.query_model)
 
+        self.file_browse = Gtk.FileChooserButton()
+
         hbox = Gtk.Box(orientation = Gtk.Orientation.HORIZONTAL, spacing = 20)
         vbox.pack_end(hbox, False, False, 0)
+
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing = 20)
+        vbox.set_homogeneous(False)
+        hbox.pack_start(vbox, True, True, 0)
         
-        hbox.pack_start(start_model, True, True, 0)
-        hbox.pack_start(query_submit, True, True, 0)
+        vbox.pack_start(start_model, False, True, 0)
+        vbox.pack_start(self.file_browse, False, True, 0)
+
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing = 20)
+        vbox.set_homogeneous(False)
+        hbox.pack_start(vbox, True, True, 0)
+
+        vbox.pack_start(query_submit, True, True, 0)
 
     def create_info(self):
         self.info = Gtk.Box(spacing=10)
@@ -104,8 +117,8 @@ class MainWindow(Gtk.Window):
         self.info.pack_start(vbox, True, True, 0)
 
         text = ['SW2V (v0.1)',
-        'SW2V (Simple Word2Vec) is an app I\'ve put together to make it easier for people at my university to use a linguistic inquiry tool like Word2Vec.',
-        'This app should be seen as a step towards creating a local software solution that would replace Tilburg University\'s crash-y web-based application... As long as the users have a few GBs to spare on their hard drive :D',
+        'This project is a simple GTK3 graphical user interface (GUI) for gensim\'s Word2Vec.',
+        'Its purpose is to streamline (at least a bit) the process of querying a W2V model.\nCurrently, it only outputs the cosine similarity between inputed terms.',
         'How to use the software:\n1. Input the terms you want to research in the text field\n2. Load the (appropriate) W2V model\n3. Grab a coffee and wait for the model to load\n4. Press submit and open the generated CSV file (it is in the \'exports\' folder)',
         'Made by Tudor Paisa | Licensed under GPL v2 | 2018']
 
@@ -116,7 +129,7 @@ class MainWindow(Gtk.Window):
         text_body.set_homogeneous(False)
         vbox.pack_start(text_body, True, True, 0)
 
-        label = Gtk.Label(text[1]+' '+text[2]+'\n'+text[3])
+        label = Gtk.Label(text[1]+'\n'+text[2]+'\n'+text[3])
         label.set_line_wrap(True)
         text_body.pack_start(label, False, False, 0)
 
@@ -127,8 +140,17 @@ class MainWindow(Gtk.Window):
         if switch.get_active():
             self.logbuffer.insert(self.logbuffer.get_end_iter(), log_messages(1))
             sleep(5) #To give enough time for the message to pop on the screen
-            self.model = gensim.models.KeyedVectors.load_word2vec_format('src/w2v_model.wv')
-            self.logbuffer.insert(self.logbuffer.get_end_iter(), log_messages(2))
+            file_location = self.file_browse.get_uri()
+            if file_location is not None:
+                try:
+                    self.model = gensim.models.KeyedVectors.load_word2vec_format(file_location)
+                    self.logbuffer.insert(self.logbuffer.get_end_iter(), log_messages(2))
+                except ValueError:
+                    self.logbuffer.insert(self.logbuffer.get_end_iter(), log_messages(8))
+                    switch.set_state(False)
+            else:
+                self.logbuffer.insert(self.logbuffer.get_end_iter(), log_messages(7))
+                switch.set_state(False)
         else:
             try:
                 self.logbuffer.insert(self.logbuffer.get_end_iter(), log_messages(3))
@@ -148,9 +170,6 @@ class MainWindow(Gtk.Window):
             self.logbuffer.insert(self.logbuffer.get_end_iter(), log_messages(6))
         else:
             self.logbuffer.insert(self.logbuffer.get_end_iter(), log_messages(7))
-
-        
-        #print(self.model.similarity('black_metal', 'death_metal'))
 
 def query_similarity(terms, model):
     query = terms.splitlines()
@@ -186,7 +205,8 @@ def log_messages(idx):
     '\n[X] Model successfully closed!',
     '\n[ ] Querying the model...',
     '\n[X] Finished! You can check the \'exports\' folder to see the results.',
-    '\n[!] Error: Model not loaded. Please load the Word2Vec model first']
+    '\n[!] Error: Missing model. Please load the Word2Vec model first',
+    '\n[!] Error: Could not load file. Is it a Word2Vec model?']
     return log[idx]
 
 win = MainWindow()
