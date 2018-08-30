@@ -26,7 +26,8 @@ python3 gensim pandas scipy numpy pygobject3
 ```
 
 ## TODO
-* [ ] Add the entire palette of W2V querying options
+- [ ] Add a "Select model" button (to replace the model overwrite workaround)
+- [ ] Add the entire palette of W2V querying options
 - [ ] Make the model loading process run on a separate thread
 - [ ] Consider a new naming scheme for the exports; _seconds might be a little bit overkill_
 
