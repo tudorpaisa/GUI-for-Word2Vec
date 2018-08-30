@@ -2,6 +2,9 @@
 
 This project is a simple GTK3 graphical user interface (GUI) for [gensim's Word2Vec](https://radimrehurek.com/gensim/). It's purpose is to streamline (at least a bit) the process of querying a W2V model. Currently, it only outputs the cosine similarity between inputed terms.
 
+## Installation
+Besides having all the dependencies, you need a [KeyedVectors](https://radimrehurek.com/gensim/models/keyedvectors.html) W2V model. Name you model `w2v_model.wv` and replace the existing (dummy) file in the `src/` folder with your model.
+
 ## How it works
 It a __3__ step process:
 1. Enter the words you want to use in the input field, each on a new line
